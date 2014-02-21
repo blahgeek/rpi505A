@@ -32,9 +32,9 @@ $(document).ready(function(){
         var $switch = $('#switch');
         var url = base_url;
         if($switch.data('on') == 1)
-            url = base_url + onpassword;
-        else
             url = base_url + offpassword;
+        else
+            url = base_url + onpassword;
         $.get(url, update_switch_status);
     });
 
