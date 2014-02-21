@@ -13,6 +13,7 @@ urls = (
         '/lightstatus', 'LightStatus',
         '/test', 'Test',
         '/env', 'Env',
+        '/speak', 'Speak',
         )
 
 
@@ -29,6 +30,13 @@ class Env:
             except subprocess.CalledProcessError:
                 continue
         return 'error'
+
+
+class Speak:
+    def POST(self):
+        i = web.input(content='')
+        call(['espeak', i.content])
+        return 'ok'
 
 
 class TurnOn:
