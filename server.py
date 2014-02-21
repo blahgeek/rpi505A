@@ -46,7 +46,10 @@ class Env:
 class Speak:
     def POST(self):
         i = web.input(content='')
-        call(['espeak', i.content])
+        if all([ord(k) < 128 for k in i.content]):
+            call(['espeak', i.content])
+        else:
+            call(['espeak', '-v', 'zh', i.content])
         return 'ok'
 
 
