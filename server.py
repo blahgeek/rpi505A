@@ -19,8 +19,8 @@ urls = (
         )
 
 INDEX_HTML = open(path.join(path.dirname(path.abspath(__file__)), 'static/index.html')).read()
-INDEX_HTML = INDEX_HTML.replace('onpassword', config['onpassword'])
-INDEX_HTML = INDEX_HTML.replace('offpassword', config['offpassword'])
+INDEX_HTML = INDEX_HTML.replace('{{onpassword}}', config['onpassword'])
+INDEX_HTML = INDEX_HTML.replace('{{offpassword}}', config['offpassword'])
 
 
 class Index:
