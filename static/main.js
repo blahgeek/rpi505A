@@ -45,9 +45,10 @@ $(document).ready(function(){
             $('#humidity').text(nums[0]);
             $('#temperature').text(nums[2]);
         });
+        setTimeout(update_env, 60000);
     };
 
-    setInterval(update_env, 60000);
+    update_env();
 
     $.get(base_url + '/lightstatus', update_switch_status);
     
