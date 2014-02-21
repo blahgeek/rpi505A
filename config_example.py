@@ -8,4 +8,4 @@ from os import path
 
 config = {'onpassword': '/haha',
           'offpassword': '/hehe',
-          'temp_exe_path': path.join(path.abspath(__file__), 'temp')}
+          'temp_exe_path': path.join(path.dirname(path.abspath(__file__)), 'temp')}
