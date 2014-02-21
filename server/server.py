@@ -1,12 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding=UTF-8 -*-
 # Created at Mar 31 19:07 by BlahGeek@Gmail.com
 
 import web
 import subprocess
-from subprocess import call, check_output
+from subprocess import call, check_output, Popen
 from config import config
+import os
 from os import path
+from base64 import b64decode
+from tempfile import NamedTemporaryFile
 
 urls = (
         '/', 'Index',
@@ -16,6 +19,7 @@ urls = (
         '/test', 'Test',
         '/env', 'Env',
         '/speak', 'Speak',
+        '/play', 'Play',
         )
 
 INDEX_HTML = open(path.join(path.dirname(path.abspath(__file__)), 'static/index.html')).read()
@@ -52,6 +56,16 @@ class Speak:
             call(['espeak', '-v', 'zh', i.content])
         return 'ok'
 
+class Play(object):
+    def POST(self):
+        data = web.data()
+        music = b64decode(data)
+        fname = '/tmp/music'
+        with open(fname, 'wb') as f:
+            f.write(music)
+        Popen(['mplayer', fname, '-noconsolecontrols'])
+        return 'ok'
+
 
 class TurnOn:
     def GET(self):
@@ -71,6 +85,9 @@ class LightStatus:
 
 
 if __name__ == '__main__':
-    call('gpio -g mode 4 out'.split(' '))
+    try:
+        call('gpio -g mode 4 out'.split(' '))
+    except OSError:
+        print 'error executing gpio'
     app = web.application(urls, globals())
     app.run()
