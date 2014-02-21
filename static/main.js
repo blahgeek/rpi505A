@@ -40,7 +40,7 @@ $(document).ready(function(){
 
     var update_env = function(){
         $.get(base_url + '/env', function(data){
-            if(data.indexOf('error') > 0) return;
+            if(data.indexOf('error') >= 0) return;
             var nums = $.trim(data).split('\n');
             $('#humidity').text(nums[0]);
             $('#temperature').text(nums[2]);
