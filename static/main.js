@@ -38,6 +38,17 @@ $(document).ready(function(){
         $.get(url, update_switch_status);
     });
 
+    var update_env = function(){
+        $.get(base_url + '/env', function(data){
+            if(data.indexOf('error') > 0) return;
+            var nums = $.trim(data).split('\n');
+            $('#humidity').text(nums[0]);
+            $('#temperature').text(nums[2]);
+        });
+    };
+
+    setInterval(update_env, 60000);
+
     $.get(base_url + '/lightstatus', update_switch_status);
     
 });
