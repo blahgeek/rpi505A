@@ -4,14 +4,13 @@
 
 import web
 import subprocess
-import os
-from os import path
 from subprocess import call, check_output
 from config import config
 
 urls = (
         config['onpassword'], 'TurnOn',
         config['offpassword'], 'TurnOff',
+        '/lightstatus', 'LightStatus',
         '/test', 'Test',
         '/env', 'Env',
         )
@@ -26,9 +25,7 @@ class Env:
     def GET(self):
         for i in xrange(3):
             try:
-                return check_output(['sudo',
-                                     os.path.join(os.path.abspath(__file__),
-                                                  'temp')])
+                return check_output(['sudo', config['temp_exe_path']])
             except subprocess.CalledProcessError:
                 continue
         return 'error'
@@ -37,13 +34,18 @@ class Env:
 class TurnOn:
     def GET(self):
         call('gpio -g write 4 1'.split(' '))
-        return 'ok'
+        raise web.seeother('/lightstatus')
 
 
 class TurnOff:
     def GET(self):
         call('gpio -g write 4 0'.split(' '))
-        return 'ok'
+        raise web.seeother('/lightstatus')
+
+
+class LightStatus:
+    def GET(self):
+        return check_output('gpio -g read 4'.split(' '))
 
 
 if __name__ == '__main__':
