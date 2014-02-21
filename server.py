@@ -6,8 +6,10 @@ import web
 import subprocess
 from subprocess import call, check_output
 from config import config
+from os import path
 
 urls = (
+        '/', 'Index',
         config['onpassword'], 'TurnOn',
         config['offpassword'], 'TurnOff',
         '/lightstatus', 'LightStatus',
@@ -15,6 +17,15 @@ urls = (
         '/env', 'Env',
         '/speak', 'Speak',
         )
+
+INDEX_HTML = open(path.join(path.abspath(__file__), 'static/index.html')).read()
+INDEX_HTML = INDEX_HTML.replace('onpassword', config['onpassword'])
+INDEX_HTML = INDEX_HTML.replace('offpassword', config['offpassword'])
+
+
+class Index:
+    def GET(self):
+        return INDEX_HTML
 
 
 class Test:

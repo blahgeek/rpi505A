@@ -7,7 +7,7 @@
 
 $(document).ready(function(){
 
-    var base_url = 'http://59.66.132.20:4242';
+    var base_url = '';
 
     $('#speak').click(function(e){
         e.preventDefault();
@@ -32,9 +32,9 @@ $(document).ready(function(){
         var $switch = $('#switch');
         var url = base_url;
         if($switch.data('on') == 1)
-            url = base_url + '/turnoff505A';
+            url = base_url + onpassword;
         else
-            url = base_url + '/turnon505A';
+            url = base_url + offpassword;
         $.get(url, update_switch_status);
     });
 
