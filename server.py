@@ -4,13 +4,16 @@
 
 import web
 import subprocess
+import os
+from os import path
 from subprocess import call, check_output
+from config import config
 
 urls = (
-        '/turnon505A', 'TurnOn', 
-        '/turnoff505A', 'TurnOff', 
-        '/test', 'Test', 
-        '/env', 'Env', 
+        config['onpassword'], 'TurnOn',
+        config['offpassword'], 'TurnOff',
+        '/test', 'Test',
+        '/env', 'Env',
         )
 
 
@@ -23,7 +26,9 @@ class Env:
     def GET(self):
         for i in xrange(3):
             try:
-                return check_output('sudo /home/blahgeek/temp'.split(' '))
+                return check_output(['sudo',
+                                     os.path.join(os.path.abspath(__file__),
+                                                  'temp')])
             except subprocess.CalledProcessError:
                 continue
         return 'error'
