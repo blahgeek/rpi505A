@@ -6,10 +6,8 @@ import web
 import subprocess
 from subprocess import call, check_output, Popen
 from config import config
-import os
 from os import path
 from base64 import b64decode
-from tempfile import NamedTemporaryFile
 
 urls = (
         '/', 'Index',
@@ -25,6 +23,9 @@ urls = (
 INDEX_HTML = open(path.join(path.dirname(path.abspath(__file__)), 'static/index.html')).read()
 INDEX_HTML = INDEX_HTML.replace('{{onpassword}}', config['onpassword'])
 INDEX_HTML = INDEX_HTML.replace('{{offpassword}}', config['offpassword'])
+
+LIGHT_GPIO = 4
+TURTLE_GPIO = 18
 
 
 class Index:
@@ -67,26 +68,32 @@ class Play(object):
         return 'ok'
 
 
+def turn(status):
+    data = web.input(gpio=LIGHT_GPIO)
+    call(['gpio', '-g', 'write', str(data.gpio), '1' if status else '0'])
+    raise web.seeother('/lightstatus?gpio=%s' % data.gpio)
+
+
 class TurnOn:
     def GET(self):
-        call('gpio -g write 4 1'.split(' '))
-        raise web.seeother('/lightstatus')
+        turn(1)
 
 
 class TurnOff:
     def GET(self):
-        call('gpio -g write 4 0'.split(' '))
-        raise web.seeother('/lightstatus')
+        turn(0)
 
 
 class LightStatus:
     def GET(self):
-        return check_output('gpio -g read 4'.split(' '))
+        data = web.input(gpio=LIGHT_GPIO)
+        return check_output(['gpio', '-g', 'read', str(data.gpio)])
 
 
 if __name__ == '__main__':
     try:
-        call('gpio -g mode 4 out'.split(' '))
+        for gpio in (LIGHT_GPIO, TURTLE_GPIO):
+            call(['gpio', '-g', 'mode', str(gpio), 'out'])
     except OSError:
         print 'error executing gpio'
     app = web.application(urls, globals())
