@@ -25,7 +25,8 @@
         <h2 class="form-signin-heading">505A Controller</h2>
         <input type="text" id="content" class="input-block-level" placeholder="Sentence to speak">
         <button id="speak" class="btn btn-large">Speak</button>
-        <button id="switch" class="btn btn-large btn-primary">Switch Light</button>
+        <button class="btn btn-large btn-primary switch" data-gpio='4' data-msg-on='Turn On Light' data-msg-off='Turn Off Light'>Switch Light</button>
+        <button class="btn btn-large btn-primary switch" data-gpio='18' data-msg-on='Turn On Motor' data-msg-off='Turn Off Motor'>Switch Motor</button>
         <p><span class="label label-info">湿度(%) </span>&nbsp;&nbsp;<span id="humidity">NaN</span></p>
         <p><span class="label label-info">温度(℃) </span>&nbsp;&nbsp;<span id="temperature">NaN</span></p>
       </div>

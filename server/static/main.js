@@ -2,7 +2,7 @@
 * @Author: BlahGeek
 * @Date:   2014-02-21
 * @Last Modified by:   BlahGeek
-* @Last Modified time: 2014-02-21
+* @Last Modified time: 2014-03-10
 */
 
 $(document).ready(function(){
@@ -17,25 +17,26 @@ $(document).ready(function(){
         $.post(base_url + '/speak', {content: content});
     });
 
-    var update_switch_status = function(data){
-        var $switch = $('#switch');
+    var update_switch_status = function($switch, data){
         var d = parseInt(data);
         $switch.data('on', d);
         if(d == 1)
-            $switch.text('Turn Off Light');
+            $switch.text($switch.attr('data-msg-off'));
         else
-            $switch.text('Turn On Light');
+            $switch.text($switch.attr('data-msg-on'));
     };
 
-    $('#switch').click(function(e){
+    $('.switch').click(function(e){
         e.preventDefault();
-        var $switch = $('#switch');
+        var $switch = $(this);
         var url = base_url;
         if($switch.data('on') == 1)
             url = base_url + offpassword;
         else
             url = base_url + onpassword;
-        $.get(url, update_switch_status);
+        $.get(url, {gpio: $switch.attr('data-gpio')}, function(data){
+            update_switch_status($switch, data);
+        });
     });
 
     var update_env = function(){
@@ -50,6 +51,11 @@ $(document).ready(function(){
 
     update_env();
 
-    $.get(base_url + '/lightstatus', update_switch_status);
+    $('.switch').each(function(i, v){
+        var $switch = $(v);
+        $.get(base_url + '/lightstatus', {gpio: $switch.attr('data-gpio')}, function(data){
+            update_switch_status($switch, data);
+        });
+    });
     
 });
