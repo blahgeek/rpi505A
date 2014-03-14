@@ -67,6 +67,10 @@ class Play(object):
         Popen(['mplayer', fname, '-noconsolecontrols'])
         return 'ok'
 
+    def GET(self):
+        Popen(['killall', 'mplayer'])
+        return 'killed'
+
 
 def turn(status):
     data = web.input(gpio=LIGHT_GPIO)
